@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- No need to set system property "Log4jContextSelector" to any value
+     when using <asyncLogger> or <asyncRoot>. -->
+
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{DEFAULT} %p [%t] %-5level %class{1.} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- pattern layout actually uses location, so we need to include it -->
+        <AsyncLogger name="com.github.amitsk.learningkotlin" level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </AsyncLogger>
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
