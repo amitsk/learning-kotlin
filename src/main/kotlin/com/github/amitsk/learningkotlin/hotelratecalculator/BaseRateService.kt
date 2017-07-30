@@ -8,7 +8,7 @@ import java.util.*
 
  */
 class BaseRateService(val currency: Currency) {
-    val getBaseRateForZipCode: (ZipCode?) -> Pair<Rate, Currency> = { zipCode ->
+    val getBaseRateForZipCode: (ZipCode?) -> Pair<RoomRate, Currency> = { zipCode ->
         require(!zipCode.isNullOrBlank())
 
         when (zipCode) {

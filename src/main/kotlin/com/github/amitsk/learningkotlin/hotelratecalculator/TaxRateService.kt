@@ -1,14 +1,12 @@
 package com.github.amitsk.learningkotlin.hotelratecalculator
 
-import java.util.Currency
-
 /**
  * Get the base room rate for a zip code.
  * Only supports zip codes - 97006, 97007, 97220
  */
 object TaxRateService {
 
-    val getTaxPercentForZipCode: (String?) -> Rate = { zipCode ->
+    val getTaxPercentForZipCode: (String?) -> Percentage = { zipCode ->
         require(!zipCode.isNullOrEmpty())
 
         when (zipCode) {

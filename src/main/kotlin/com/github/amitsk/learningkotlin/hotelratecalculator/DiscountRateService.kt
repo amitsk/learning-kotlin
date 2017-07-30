@@ -5,7 +5,7 @@ import java.time.Month.*
 
 object DiscountRateService {
 
-    val getDiscountRateForMonth: (Month) -> Rate = { month ->
+    val getDiscountRateForMonth: (Month) -> Percentage = { month ->
         when {
             month <= AUGUST && month >= JUNE -> 0.5
             month == DECEMBER || month == NOVEMBER -> 0.2

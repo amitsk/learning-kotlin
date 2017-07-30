@@ -11,7 +11,7 @@ object Luhn {
     }
 
     fun isValid(str: String): Boolean {
-        if (str?.trim().length <= 1 ||
+        if (str.trim().length <= 1 ||
                 (str.filterNot { digitOrWs(it) }.length > 0)) return false
 
         val onlyNums: List<Int> = str.filter { it.isDigit() }.map { Character.getNumericValue(it) }

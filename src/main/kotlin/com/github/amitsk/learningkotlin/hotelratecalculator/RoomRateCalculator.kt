@@ -6,17 +6,17 @@ import java.util.*
 /**
  * Get the room rate for a zip code and the month
  */
-class RoomRateCalculator(val baseRateSvc: (ZipCode) -> Pair<RoomRate, Currency>,
-                         val discountSvc: (Month) -> Rate,
-                         val taxSvc: (ZipCode) -> Rate) {
+class RoomRateCalculator(private val baseRateSvc: (ZipCode) -> Pair<RoomRate, Currency>,
+                         private val discountSvc: (Month) -> Percentage,
+                         private val taxSvc: (ZipCode) -> Percentage) {
 
     fun getTotalRoomRate(roomRateInput: RoomRateInput): RoomRateResult {
-        val taxRate = taxSvc(roomRateInput.zipCode)
+        val taxPercent = taxSvc(roomRateInput.zipCode)
         val baseRate = baseRateSvc(roomRateInput.zipCode)
-        val discountRateForMonth = discountSvc(roomRateInput.month)
+        val discountPercent = discountSvc(roomRateInput.month)
 
-        val rate = baseRate.first * (1 + discountRateForMonth) +
-                baseRate.first * (taxRate / 100)
+        val rate = baseRate.first * (1 + discountPercent/100) +
+                baseRate.first * (taxPercent / 100)
         return RoomRateResult(roomRateInput.zipCode,
                 roomRateInput.month, rate)
     }
