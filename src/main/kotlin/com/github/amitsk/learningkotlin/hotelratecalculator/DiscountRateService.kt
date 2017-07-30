@@ -1,14 +1,17 @@
 package com.github.amitsk.learningkotlin.hotelratecalculator
 
-class DiscountRateService {
+import java.time.Month
+import java.time.Month.*
 
-    fun getDiscountRateForMonth(month: Int): Double {
+object DiscountRateService {
+
+    val getDiscountRateForMonth: (Month) -> Rate = { month ->
         when {
-            month <= 8 && month >= 6 -> return 0.5
-            month == 12 || month == 11 -> return 0.2
-            month == 3 -> return 0.3
-            month == 10 || month == 2 || month == 1 -> return -0.3
-            else -> return 0.0
+            month <= AUGUST && month >= JUNE -> 0.5
+            month == DECEMBER || month == NOVEMBER -> 0.2
+            month == MARCH -> 0.3
+            month == OCTOBER || month == FEBRUARY || month == JANUARY -> -0.3
+            else -> 0.0
         }
     }
 }

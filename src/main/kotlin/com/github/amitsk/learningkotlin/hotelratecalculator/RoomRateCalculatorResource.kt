@@ -1,18 +1,18 @@
 package com.github.amitsk.learningkotlin.hotelratecalculator
 
 
-import java.util.Currency
-
+import spark.Spark.get
 import java.lang.Integer.parseInt
-import spark.Spark.*
+import java.time.Month
+import java.util.*
 
 
 object RoomRateCalculatorResource {
 
     private val roomRateCalculator = RoomRateCalculator(
-            BaseRateForZipCodeService(Currency.getInstance("USD")),
-            DiscountRateService(),
-            TaxRateByZipCodeService())
+            BaseRateService(Currency.getInstance("USD")).getBaseRateForZipCode,
+            DiscountRateService.getDiscountRateForMonth,
+            TaxRateService.getTaxPercentForZipCode)
 
     @JvmStatic fun main(args: Array<String>) {
         get("/roomrate/:zipcode/:month") { request, response ->
@@ -23,7 +23,8 @@ object RoomRateCalculatorResource {
                 response.status(400)
                 return@get response
             } else {
-                return@get roomRateCalculator.getTotalRoomRate(RoomRateCalculator.RoomRateInput(zipCode, parseInt(month)))
+                return@get roomRateCalculator.getTotalRoomRate(RoomRateInput(zipCode,
+                        Month.of(parseInt(month))))
             }
 
         }

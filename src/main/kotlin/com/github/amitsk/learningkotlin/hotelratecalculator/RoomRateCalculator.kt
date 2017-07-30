@@ -1,19 +1,24 @@
 package com.github.amitsk.learningkotlin.hotelratecalculator
 
+import java.time.Month
+import java.util.*
+
 /**
  * Get the room rate for a zip code and the month
  */
-class RoomRateCalculator(private val baseRateSvc: BaseRateForZipCodeService,
-                         private val discountSvc: DiscountRateService,
-                         private val taxSvc: TaxRateByZipCodeService) {
+class RoomRateCalculator(val baseRateSvc: (ZipCode) -> Pair<RoomRate, Currency>,
+                         val discountSvc: (Month) -> Rate,
+                         val taxSvc: (ZipCode) -> Rate) {
 
-    fun getTotalRoomRate(roomRateInput: RoomRateInput): Double {
-        val taxRate = taxSvc.getTaxPercentForZipCode(roomRateInput.zipCode)
-        val baseRate = baseRateSvc.getBaseRateForZipCode(roomRateInput.zipCode)
-        val discountRateForMonth = discountSvc.getDiscountRateForMonth(roomRateInput.month)
+    fun getTotalRoomRate(roomRateInput: RoomRateInput): RoomRateResult {
+        val taxRate = taxSvc(roomRateInput.zipCode)
+        val baseRate = baseRateSvc(roomRateInput.zipCode)
+        val discountRateForMonth = discountSvc(roomRateInput.month)
 
-        return baseRate * (1 + discountRateForMonth) + baseRate * (taxRate / 100)
+        val rate = baseRate.first * (1 + discountRateForMonth) +
+                baseRate.first * (taxRate / 100)
+        return RoomRateResult(roomRateInput.zipCode,
+                roomRateInput.month, rate)
     }
 
-    data class RoomRateInput(val zipCode: String, val month: Int)
 }
